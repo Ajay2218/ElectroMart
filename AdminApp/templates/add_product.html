@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% extends 'dashboard.html' %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title text-center">Add Product Details</h3>
+                    <form class="forms-sample" method="post" action="{% url 'save_product' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                      <label for="exampleFormControlSelect2">Category Name</label>
+                      <select class="form-control" name="cname" id="exampleFormControlSelect2">
+                          <option>Select the category</option>
+                          {% for i in categories %}
+                          <option>{{i.Category_name}}</option>
+                          {% endfor %}
+                      </select>
+                    </div>
+                      <div class="form-group">
+                        <label for="exampleInputProname1">Product Name</label>
+                        <input type="text" name="pname" class="form-control" id="exampleInputProname1" placeholder="Product Name">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputEmail3">Price</label>
+                        <input type="number" name="price" class="form-control" id="exampleInputEmail3" placeholder="Price">
+                      </div>
+                       <div class="form-group">
+                        <label for="exampleInputBrand">Brand</label>
+                        <input type="text" name="brand" class="form-control" id="exampleInputBrand" placeholder="Brand">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleShort">Short Description</label>
+                        <textarea class="form-control" name="sdesc" id="exampleShort" rows="4"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleTextarea1">Detailed Description/Specifications</label>
+                        <textarea class="form-control" name="detailed_desc" id="exampleTextarea1" rows="4"></textarea>
+                      </div>
+                      <div class="form-group">
+                        <label>Product Image 1</label>
+                        <input type="file" name="img1" class="form-control">
+                        <label>Product Image 2</label>
+                        <input type="file" name="img2" class="form-control">
+                        <label>Product Image 3</label>
+                        <input type="file" name="img3" class="form-control">
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                      <button class="btn btn-dark">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+
+
+               <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        {% if messages %}
+            {% for i in messages %}
+                {% if i.tags == 'success' %}
+                    <script>
+                        swal('{{i}}','','success')
+                    </script>
+
+                {% elif i.tags == 'error' %}
+                    <script>
+                        swal('{{i}}','','error')
+                    </script>
+                {% elif i.tags == 'warning' %}
+                    <script>
+                        swal('{{i}}','','warning')
+                    </script>
+                {% elif i.tags == 'info' %}
+                    <script>
+                        swal('{{i}}','','info')
+                    </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+</body>
+</html>
+{% endblock %}
