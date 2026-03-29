@@ -1,9 +1,9 @@
-from email.headerregistry import Address
-
 from django.shortcuts import render, redirect
 from AdminApp.models import CategoryDb, ProductDb
 from WebApp.models import User_RegistrationDb, ContactDb, CartDb, OrderDb
 from django.contrib import  messages
+from django.conf import settings
+from django.urls import reverse
 import razorpay
 
 # Create your views here.
@@ -27,7 +27,7 @@ def filtered_product(request,cat_name):
     categories = CategoryDb.objects.all()
     latest_products = ProductDb.objects.order_by('-id')[:3]
     product = ProductDb.objects.filter(CategoryName=cat_name).all()
-    return render(request,"filtered_products.html",{"products":products,"categories":categories,"product":product,"latest_products":latest_products})
+    return render(request,"filtered_products.html",{"products":products,"categories":categories,"product":product,"latest_products":latest_products,"selected_category":cat_name})
 
 def single_product(request,pro_id):
     categories = CategoryDb.objects.all()
@@ -70,12 +70,13 @@ def user_login(request):
             return redirect(sign_in)
 
 def user_logout(request):
-    del request.session['Username']
-    del request.session['Password']
+    request.session.pop('Username', None)
+    request.session.pop('Password', None)
     return redirect(home_page)
 
 def contact(request):
-    return render(request,"contact.html")
+    categories = CategoryDb.objects.all()
+    return render(request,"contact.html", {"categories": categories})
 
 def save_contact(request):
     if request.method == "POST":
@@ -95,7 +96,9 @@ def support_page(request):
     return render(request,"support_page.html")
 
 def cart(request):
-    carts = CartDb.objects.filter(Username=request.session['Username'])
+    categories = CategoryDb.objects.all()
+    username = request.session.get('Username')
+    carts = CartDb.objects.filter(Username=username) if username else CartDb.objects.none()
     subtotal = 0
     shipping_charge = 0
     total = 0
@@ -112,7 +115,14 @@ def cart(request):
 
         total = subtotal + shipping_charge
 
-    return render(request,"cart.html",{"carts":carts,"subtotal":subtotal,"shipping_charge":shipping_charge,"total":total})
+    return render(request,"cart.html",{
+        "carts":carts,
+        "subtotal":subtotal,
+        "shipping_charge":shipping_charge,
+        "total":total,
+        "categories":categories,
+        "cart_user_logged_in": bool(username),
+    })
 
 def delete_cart_product(request,p_id):
     data = CartDb.objects.filter(id=p_id)
@@ -133,7 +143,13 @@ def save_to_cart(request):
         return redirect(home_page)
 
 def checkout(request):
-    carts = CartDb.objects.filter(Username=request.session['Username'])
+    categories = CategoryDb.objects.all()
+    username = request.session.get('Username')
+    if not username:
+        messages.error(request, "Please sign in to continue to checkout.")
+        return redirect(sign_in)
+
+    carts = CartDb.objects.filter(Username=username)
     subtotal = 0
     shipping_charge = 0
     total = 0
@@ -148,7 +164,7 @@ def checkout(request):
             shipping_charge = 250
 
         total = subtotal + shipping_charge
-    return render(request,"checkout.html",{"carts":carts,"subtotal":subtotal,"total":total,"shipping_charge":shipping_charge})
+    return render(request,"checkout.html",{"carts":carts,"subtotal":subtotal,"total":total,"shipping_charge":shipping_charge,"categories":categories})
 
 def save_order(request):
     if request.method == "POST":
@@ -163,30 +179,113 @@ def save_order(request):
         email = request.POST.get("email")
         obj = OrderDb(Username=uname,Full_name=full_name,Total_price=total,
                       Place=place,Mobile=mobile,Address=address,Message=message,
-                      Pincode=pin,Email=email)
+                      Pincode=pin,Email=email,Payment_status="Pending")
         obj.save()
-        return redirect(checkout)
+        return redirect(payment_page)
+    return redirect(checkout)
 
 
 def payment_page(request):
     categories = CategoryDb.objects.all()
     for category in categories:
-        count = ProductDb.objects.filter(Category_name=category.Category_name).count()
+        count = ProductDb.objects.filter(CategoryName=category.Category_name).count()
         category.product_count = count
-    # payment details
-    # Retrieve the data from CheckoutDB with specific ID
-    customer = OrderDb.objects.order_by('-id').first()
-    pay = customer.Total_price
-    amount = int(pay * 100)
-    pay_str = str(amount)
-    if request.method == "POST":
-        order_currency = "INR"
-        client = razorpay.Client(auth=('rzp_test_0ib0jPwwZ7I1lT', 'VjHNO5zKeKxz8PYe7VnzwxMR'))  # KEY ID, Key sceret
-        payment = client.order.create({
-            'amount': amount,
-            'currency': order_currency
-        })
 
-    return render(request, "payment.html", {"categories": categories,
-                                            'pay_str': pay_str,
-                                            'amount': amount})
+    username = request.session.get("Username")
+    customer = OrderDb.objects.filter(Username=username).order_by('-id').first()
+    if customer is None:
+        messages.error(request, "Please place an order before continuing to payment.")
+        return redirect(checkout)
+
+    if customer.Payment_status == "Paid":
+        messages.success(request, "This order has already been paid successfully.")
+        return redirect(home_page)
+
+    try:
+        total_price = int(float(customer.Total_price))
+    except (TypeError, ValueError):
+        messages.error(request, "Invalid order total found. Please place the order again.")
+        return redirect(checkout)
+
+    amount = total_price * 100
+    razorpay_key_id = getattr(settings, "RAZORPAY_KEY_ID", "rzp_test_0ib0jPwwZ7I1lT")
+    razorpay_key_secret = getattr(settings, "RAZORPAY_KEY_SECRET", "VjHNO5zKeKxz8PYe7VnzwxMR")
+
+    client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
+    if customer.Razorpay_order_id and customer.Payment_status == "Pending":
+        payment_order_id = customer.Razorpay_order_id
+    else:
+        payment_order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": "1",
+        })
+        payment_order_id = payment_order["id"]
+        customer.Razorpay_order_id = payment_order_id
+        customer.Payment_status = "Initiated"
+        customer.save(update_fields=["Razorpay_order_id", "Payment_status"])
+
+    context = {
+        "categories": categories,
+        "customer": customer,
+        "display_amount": total_price,
+        "amount": amount,
+        "razorpay_key_id": razorpay_key_id,
+        "payment_order_id": payment_order_id,
+        "payment_success_url": reverse("payment_success"),
+        "payment_failed_url": reverse("payment_failed"),
+    }
+    return render(request, "payment.html", context)
+
+
+def payment_success(request):
+    if request.method != "POST":
+        messages.error(request, "Invalid payment response.")
+        return redirect(payment_page)
+
+    razorpay_payment_id = request.POST.get("razorpay_payment_id")
+    razorpay_order_id = request.POST.get("razorpay_order_id")
+    razorpay_signature = request.POST.get("razorpay_signature")
+
+    order = OrderDb.objects.filter(Razorpay_order_id=razorpay_order_id).order_by("-id").first()
+    if order is None:
+        messages.error(request, "Order not found for this payment.")
+        return redirect(checkout)
+
+    razorpay_key_id = getattr(settings, "RAZORPAY_KEY_ID", "rzp_test_0ib0jPwwZ7I1lT")
+    razorpay_key_secret = getattr(settings, "RAZORPAY_KEY_SECRET", "VjHNO5zKeKxz8PYe7VnzwxMR")
+    client = razorpay.Client(auth=(razorpay_key_id, razorpay_key_secret))
+
+    try:
+        client.utility.verify_payment_signature({
+            "razorpay_order_id": razorpay_order_id,
+            "razorpay_payment_id": razorpay_payment_id,
+            "razorpay_signature": razorpay_signature,
+        })
+    except razorpay.errors.SignatureVerificationError:
+        order.Payment_status = "Failed"
+        order.Razorpay_payment_id = razorpay_payment_id
+        order.Razorpay_signature = razorpay_signature
+        order.save(update_fields=["Payment_status", "Razorpay_payment_id", "Razorpay_signature"])
+        messages.error(request, "Payment verification failed. Please try again.")
+        return redirect(payment_page)
+
+    order.Payment_status = "Paid"
+    order.Razorpay_payment_id = razorpay_payment_id
+    order.Razorpay_signature = razorpay_signature
+    order.save(update_fields=["Payment_status", "Razorpay_payment_id", "Razorpay_signature"])
+
+    CartDb.objects.filter(Username=order.Username).delete()
+    messages.success(request, "Payment successful. Your order has been confirmed.")
+    return redirect(home_page)
+
+
+def payment_failed(request):
+    razorpay_order_id = request.GET.get("order_id")
+    order = OrderDb.objects.filter(Razorpay_order_id=razorpay_order_id).order_by("-id").first()
+    if order is not None and order.Payment_status != "Paid":
+        order.Payment_status = "Failed"
+        order.save(update_fields=["Payment_status"])
+
+    messages.error(request, "Payment was cancelled or failed. Please try again.")
+    return redirect(payment_page)

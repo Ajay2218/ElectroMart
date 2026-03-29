@@ -33,4 +33,8 @@ class OrderDb(models.Model):
     Message = models.TextField(null=True,blank=True)
     Mobile = models.BigIntegerField(null=True,blank=True)
     Total_price =models.CharField(max_length=100,null=True,blank=True)
+    Razorpay_order_id = models.CharField(max_length=200, null=True, blank=True)
+    Razorpay_payment_id = models.CharField(max_length=200, null=True, blank=True)
+    Razorpay_signature = models.CharField(max_length=255, null=True, blank=True)
+    Payment_status = models.CharField(max_length=30, null=True, blank=True, default="Pending")
 

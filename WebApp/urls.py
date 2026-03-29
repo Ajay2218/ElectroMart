@@ -21,5 +21,7 @@ urlpatterns = [
     path('save_to_cart/',views.save_to_cart,name="save_to_cart"),
     path('delete_cart_product/<int:p_id>',views.delete_cart_product,name="delete_cart_product"),
     path('payment/',views.payment_page,name="payment"),
-    path('save_order/',views.save_order,name="save_order")
+    path('save_order/',views.save_order,name="save_order"),
+    path('payment/success/', views.payment_success, name="payment_success"),
+    path('payment/failed/', views.payment_failed, name="payment_failed"),
   ]

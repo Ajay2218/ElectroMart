@@ -212,19 +212,63 @@
     </div>
     <!-- Navbar & Hero End -->
 
-    <!-- Single Page Header start -->
-    <div class="container-fluid page-header py-5">
-        <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Contact Us</h1>
-        <ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Pages</a></li>
-            <li class="breadcrumb-item active text-white">Contact</li>
-        </ol>
+    <!-- Carousel Start -->
+    <div class="container-fluid carousel bg-light px-0">
+        <div class="row g-0 justify-content-end">
+            <div class="col-12 col-lg-7 col-xl-9">
+                <div class="header-carousel owl-carousel bg-light py-5">
+                    <div class="row g-0 header-carousel-item align-items-center">
+                        <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                            <img src="{% static 'web/img/carousel-1.png' %}" class="img-fluid w-100" alt="Image">
+                        </div>
+                        <div class="col-xl-6 carousel-content p-4">
+                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px;">We Are Here To Help</h4>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Talk To ElectroMart Support For Orders, Products And Assistance</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Reach out to us and we will help you with shopping, orders and product guidance.</p>
+                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                                href="#contact-form">Send Message</a>
+                        </div>
+                    </div>
+                    <div class="row g-0 header-carousel-item align-items-center">
+                        <div class="col-xl-6 carousel-img wow fadeInLeft" data-wow-delay="0.1s">
+                            <img src="{% static 'web/img/carousel-2.png' %}" class="img-fluid w-100" alt="Image">
+                        </div>
+                        <div class="col-xl-6 carousel-content p-4">
+                            <h4 class="text-uppercase fw-bold mb-4 wow fadeInRight" data-wow-delay="0.1s"
+                                style="letter-spacing: 3px;">Fast Response From Our Team</h4>
+                            <h1 class="display-3 text-capitalize mb-4 wow fadeInRight" data-wow-delay="0.3s">Need Help With A Product Or Delivery? Let Us Know</h1>
+                            <p class="text-dark wow fadeInRight" data-wow-delay="0.5s">Our team is ready to help with checkout, shipping, support and product questions.</p>
+                            <a class="btn btn-primary rounded-pill py-3 px-5 wow fadeInRight" data-wow-delay="0.7s"
+                                href="#contact-form">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5 col-xl-3 wow fadeInRight" data-wow-delay="0.1s">
+                <div class="carousel-header-banner h-100">
+                    <img src="{% static 'web/img/header-img.jpg' %}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Image">
+                    <div class="carousel-banner-offer">
+                        <p class="bg-primary text-white rounded fs-5 py-2 px-4 mb-0 me-3">24/7 Support</p>
+                        <p class="text-primary fs-5 fw-bold mb-0">Contact Desk</p>
+                    </div>
+                    <div class="carousel-banner">
+                        <div class="carousel-banner-content text-center p-4">
+                            <a href="{% url 'contact' %}" class="d-block mb-2">ElectroMart</a>
+                            <a href="{% url 'contact' %}" class="d-block text-white fs-3">Customer Help <br> And Support</a>
+                            <span class="text-primary fs-5">We are ready to assist you</span>
+                        </div>
+                        <a href="#contact-form" class="btn btn-primary rounded-pill py-2 px-4"><i
+                                class="fas fa-envelope me-2"></i> Reach Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Single Page Header End -->
+    <!-- Carousel End -->
 
     <!-- Contucts Start -->
-    <div class="container-fluid contact py-5">
+    <div class="container-fluid contact py-5" id="contact-form">
         <div class="container py-5">
             <div class="p-5 bg-light rounded">
                 <div class="row g-4">
@@ -237,7 +281,7 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <h5 class="text-primary wow fadeInUp" data-wow-delay="0.1s">Let’s Connect</h5>
+                        <h5 class="text-primary wow fadeInUp" data-wow-delay="0.1s">Let's Connect</h5>
                         <h1 class="display-5 mb-4 wow fadeInUp" data-wow-delay="0.3s">Send Your Message</h1>
                         <p class="mb-4 wow fadeInUp" data-wow-delay="0.5s">The contact form is currently inactive. Get a
                             functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste
@@ -361,7 +405,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Address</h4>
-                            <p class="mb-2">123 Street New York.USA</p>
+                            <p class="mb-2">ElectroMart Online Store, India</p>
                         </div>
                     </div>
                 </div>
@@ -373,7 +417,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Mail Us</h4>
-                            <p class="mb-2">info@example.com</p>
+                            <p class="mb-2"><a href="mailto:support@electromart.com">support@electromart.com</a></p>
                         </div>
                     </div>
                 </div>
@@ -385,7 +429,7 @@
                         </div>
                         <div>
                             <h4 class="text-white">Telephone</h4>
-                            <p class="mb-2">(+012) 3456 7890</p>
+                            <p class="mb-2"><a href="tel:+919544117286">(+91) 9544117286</a></p>
                         </div>
                     </div>
                 </div>
@@ -393,11 +437,11 @@
                     <div class="rounded p-4">
                         <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mb-4"
                             style="width: 70px; height: 70px;">
-                            <i class="fab fa-firefox-browser fa-2x text-primary"></i>
+                            <i class="fas fa-shield-alt fa-2x text-primary"></i>
                         </div>
                         <div>
-                            <h4 class="text-white">Yoursite@ex.com</h4>
-                            <p class="mb-2">(+012) 3456 7890</p>
+                            <h4 class="text-white">Secure Shopping</h4>
+                            <p class="mb-2">Safe checkout and support throughout your order journey.</p>
                         </div>
                     </div>
                 </div>
@@ -406,52 +450,44 @@
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
                         <div class="footer-item">
-                            <h4 class="text-primary mb-4">Newsletter</h4>
-                            <p class="text-white mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum
-                                dolor sit amet, consectetur adipiscing elit consectetur adipiscing elit.</p>
-                            <div class="position-relative mx-auto rounded-pill">
-                                <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text"
-                                    placeholder="Enter your email">
-                                <button type="button"
-                                    class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">SignUp</button>
-                            </div>
+                            <h4 class="text-primary mb-4">ElectroMart</h4>
+                            <p class="text-white mb-3">ElectroMart helps customers discover electronics, compare categories, manage carts, and place orders through one simple storefront.</p>
+                            <a href="{% url 'all_products' %}" class="btn btn-primary rounded-pill py-2 px-4">Browse Products</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
-                        <h4 class="text-primary mb-4">Customer Service</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Contact Us</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Returns</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Site Map</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Testimonials</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> My Account</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Unsubscribe Notification</a>
+                        <h4 class="text-primary mb-4">Quick Links</h4>
+                        <a href="{% url 'Home' %}"><i class="fas fa-angle-right me-2"></i> Home</a>
+                        <a href="{% url 'About' %}"><i class="fas fa-angle-right me-2"></i> About Us</a>
+                        <a href="{% url 'all_products' %}"><i class="fas fa-angle-right me-2"></i> Products</a>
+                        <a href="{% url 'contact' %}"><i class="fas fa-angle-right me-2"></i> Contact</a>
+                        <a href="{% url 'help_page' %}"><i class="fas fa-angle-right me-2"></i> Help</a>
+                        <a href="{% url 'support_page' %}"><i class="fas fa-angle-right me-2"></i> Support</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
-                        <h4 class="text-primary mb-4">Information</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> About Us</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Delivery infomation</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Privacy Policy</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Terms & Conditions</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Warranty</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> FAQ</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Seller Login</a>
+                        <h4 class="text-primary mb-4">Shopping</h4>
+                        <a href="{% url 'cart' %}"><i class="fas fa-angle-right me-2"></i> My Cart</a>
+                        <a href="{% url 'checkout' %}"><i class="fas fa-angle-right me-2"></i> Checkout</a>
+                        <a href="{% url 'payment' %}"><i class="fas fa-angle-right me-2"></i> Payment</a>
+                        <a href="{% url 'sign_in' %}"><i class="fas fa-angle-right me-2"></i> Sign In</a>
+                        <a href="{% url 'sign_up' %}"><i class="fas fa-angle-right me-2"></i> Create Account</a>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item d-flex flex-column">
-                        <h4 class="text-primary mb-4">Extras</h4>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Brands</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Gift Vouchers</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Affiliates</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Wishlist</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Order History</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
-                        <a href="#" class=""><i class="fas fa-angle-right me-2"></i> Track Your Order</a>
+                        <h4 class="text-primary mb-4">Support Info</h4>
+                        <p class="text-white mb-2"><i class="fas fa-phone-alt me-2 text-primary"></i> (+91) 9544117286</p>
+                        <p class="text-white mb-2"><i class="fas fa-envelope me-2 text-primary"></i> support@electromart.com</p>
+                        <p class="text-white mb-4"><i class="fas fa-clock me-2 text-primary"></i> Mon - Sat, 9:00 AM to 7:00 PM</p>
+                        <div class="d-flex">
+                            <a class="btn btn-primary btn-sm-square rounded-circle me-2" href="{% url 'contact' %}"><i class="fas fa-envelope"></i></a>
+                            <a class="btn btn-primary btn-sm-square rounded-circle me-2" href="{% url 'help_page' %}"><i class="fas fa-question"></i></a>
+                            <a class="btn btn-primary btn-sm-square rounded-circle" href="{% url 'support_page' %}"><i class="fas fa-headset"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -459,28 +495,22 @@
     </div>
     <!-- Footer End -->
 
-
     <!-- Copyright Start -->
     <div class="container-fluid copyright py-4">
         <div class="container">
             <div class="row g-4 align-items-center">
                 <div class="col-md-6 text-center text-md-start mb-md-0">
-                    <span class="text-white"><a href="#" class="border-bottom text-white"><i
-                                class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right
-                        reserved.</span>
+                    <span class="text-white"><a href="{% url 'Home' %}" class="border-bottom text-white"><i
+                                class="fas fa-copyright text-light me-2"></i>ElectroMart</a>, {% now "Y" %} All rights reserved.</span>
                 </div>
                 <div class="col-md-6 text-center text-md-end text-white">
-
-                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                    Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>.
-                    Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>
+                    Built for the ElectroMart shopping experience.
                 </div>
             </div>
         </div>
     </div>
     <!-- Copyright End -->
+
 
 
     <!-- Back to Top -->
