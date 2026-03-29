@@ -102,11 +102,10 @@ python manage.py runserver
 
 ## 📂 Project Structure
 
-* **ElectroMart/**: Project configuration, settings, and main URL routing
-* **Store/**: Handles product listing, filtering, and product details
-* **Cart/**: Manages cart operations and checkout process
-* **Orders/**: Handles order processing and payment integration
-* **media/**: Stores product images and related files
+* **ElectroMart/**: Main project configuration, settings, and URL routing
+* **WebApp/**: Core application handling product listing, filtering, cart, and user interactions
+* **AdminApp/**: Custom admin panel for managing products, users, and orders
+* **media/**: Stores uploaded product images and files
 * **static/**: Contains global CSS, JavaScript, and frontend assets
 
 ---
